@@ -1,10 +1,9 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
-import { AppState, MascotExpression, ModalUnit } from './types.ts';
-import { ALL_MODALS } from './data/modalRegistry.ts';
-import { ALL_QUIZ_QUESTIONS } from './data/quizData.ts';
-import DrOught from './components/DrOught.tsx';
-import QuizComponent from './components/QuizComponent.tsx';
+import { AppState, MascotExpression } from './types';
+import { ALL_MODALS } from './data/modalRegistry';
+import { ALL_QUIZ_QUESTIONS } from './data/quizData';
+import DrOught from './components/DrOught';
+import QuizComponent from './components/QuizComponent';
 
 const App: React.FC = () => {
   const [state, setState] = useState<AppState>({
@@ -20,10 +19,11 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [state.currentView, state.selectedModalId]);
 
-  const selectedModal = useMemo(() => 
-    ALL_MODALS.find(m => m.id === (state.selectedModalId || (state.pendingQuizType === 'modal' ? state.selectedModalId : undefined))), 
-    [state.selectedModalId, state.pendingQuizType]
-  );
+  const selectedModal = useMemo(() => {
+    const id = state.selectedModalId;
+    if (!id) return undefined;
+    return ALL_MODALS.find(m => m.id === id);
+  }, [state.selectedModalId]);
 
   const startLearning = (modalId: string) => {
     setState(prev => ({ ...prev, currentView: 'learn', selectedModalId: modalId }));
@@ -48,11 +48,12 @@ const App: React.FC = () => {
   };
 
   const initiateQuiz = (count: number) => {
-    let pool = state.pendingQuizType === 'modal' 
+    const pool = state.pendingQuizType === 'modal' 
       ? ALL_QUIZ_QUESTIONS.filter(q => q.modalId === state.selectedModalId)
       : [...ALL_QUIZ_QUESTIONS];
     
-    const shuffled = pool.sort(() => 0.5 - Math.random());
+    // Use spread to avoid mutating the original source arrays
+    const shuffled = [...pool].sort(() => 0.5 - Math.random());
     const selectedQuestions = shuffled.slice(0, Math.min(count, shuffled.length));
 
     setState(prev => ({
@@ -91,6 +92,8 @@ const App: React.FC = () => {
           <h1 className="text-5xl font-black text-indigo-300 serif">Choose Your Path</h1>
           <p className="text-xl text-slate-300 serif italic">
             Select the number of questions for {state.pendingQuizType === 'final' ? "The Wisdom Test" : `the ${selectedModal?.name} Quiz`}.
+            <br/>
+            <span className="text-sm text-slate-500 opacity-75 mt-2 inline-block">(Available questions: {poolSize})</span>
           </p>
         </div>
 
