@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
 import { AppState, MascotExpression } from './types';
 import { ALL_MODALS } from './data/modalRegistry';
@@ -122,66 +123,143 @@ const App: React.FC = () => {
     );
   };
 
-  const renderHome = () => (
-    <div className="space-y-16 animate-in fade-in duration-700 pb-20">
-      <div className="flex flex-col md:flex-row items-center gap-12 py-12">
-        <div className="w-full md:w-1/2 flex justify-center">
-          <DrOught expression={MascotExpression.IDLE} />
+  const renderHome = () => {
+    const categories = [
+      {
+        title: "Ability & Mastery",
+        description: "What you are capable of doing, now and in the past.",
+        modals: ["can", "could", "be-able-to"],
+        color: "border-blue-500/30 bg-blue-500/5 text-blue-300"
+      },
+      {
+        title: "Duty & Necessity",
+        description: "The rules we must follow and the needs we must meet.",
+        modals: ["must", "have-to", "need", "ought-to"],
+        color: "border-rose-500/30 bg-rose-500/5 text-rose-300"
+      },
+      {
+        title: "Advice & Wisdom",
+        description: "Providing guidance and gentle suggestions to others.",
+        modals: ["should", "had-better", "ought-to", "could"],
+        color: "border-amber-500/30 bg-amber-500/5 text-amber-300"
+      },
+      {
+        title: "Possibility & Chance",
+        description: "Exploring the unknown and the likely outcomes.",
+        modals: ["may", "might", "can", "could"],
+        color: "border-emerald-500/30 bg-emerald-500/5 text-emerald-300"
+      },
+      {
+        title: "Intent & The Future",
+        description: "Making plans, promises, and spontaneous decisions.",
+        modals: ["will", "shall", "would", "be-able-to"],
+        color: "border-sky-500/30 bg-sky-500/5 text-sky-300"
+      },
+      {
+        title: "Habit & Heritage",
+        description: "Looking back at the things we did repeatedly.",
+        modals: ["used-to", "would"],
+        color: "border-violet-500/30 bg-violet-500/5 text-violet-300"
+      },
+      {
+        title: "Courage & Challenge",
+        description: "Facing fears and questioning the status quo.",
+        modals: ["dare"],
+        color: "border-red-500/30 bg-red-500/5 text-red-300"
+      }
+    ];
+
+    return (
+      <div className="space-y-16 animate-in fade-in duration-700 pb-20">
+        <div className="flex flex-col md:flex-row items-center gap-12 py-12">
+          <div className="w-full md:w-1/2 flex justify-center">
+            <DrOught expression={MascotExpression.IDLE} />
+          </div>
+          <div className="w-full md:w-1/2 text-center md:text-left space-y-8">
+            <h1 className="text-7xl md:text-9xl font-black text-indigo-300 drop-shadow-2xl tracking-tight serif uppercase">MODOWL</h1>
+            <p className="text-3xl text-slate-200 serif italic font-light">Learn Modals the Wise Way</p>
+            <p className="text-xl text-slate-300 max-w-lg mx-auto md:mx-0 leading-relaxed font-medium opacity-90">
+              Hoo! Welcome to the Observatory. I am Dr. Ought. Together, we shall explore the whimsical world of modal verbs—the magic keys to English meaning.
+            </p>
+            <div className="flex flex-wrap gap-6 justify-center md:justify-start">
+              <button 
+                onClick={startFinalQuiz}
+                className="px-10 py-4 bg-indigo-600 hover:bg-indigo-500 rounded-full font-black text-lg shadow-2xl shadow-indigo-900/50 transition-all transform hover:scale-105 active:scale-95"
+              >
+                The Wisdom Test
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="w-full md:w-1/2 text-center md:text-left space-y-8">
-          <h1 className="text-7xl md:text-9xl font-black text-indigo-300 drop-shadow-2xl tracking-tight serif uppercase">MODOWL</h1>
-          <p className="text-3xl text-slate-200 serif italic font-light">Learn Modals the Wise Way</p>
-          <p className="text-xl text-slate-300 max-w-lg mx-auto md:mx-0 leading-relaxed font-medium opacity-90">
-            Hoo! Welcome to the Observatory. I am Dr. Ought. Together, we shall explore the whimsical world of modal verbs—the magic keys to English meaning.
-          </p>
-          <div className="flex flex-wrap gap-6 justify-center md:justify-start">
-            <button 
-              onClick={startFinalQuiz}
-              className="px-10 py-4 bg-indigo-600 hover:bg-indigo-500 rounded-full font-black text-lg shadow-2xl shadow-indigo-900/50 transition-all transform hover:scale-105 active:scale-95"
+
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {ALL_MODALS.map(modal => (
+            <div 
+              key={modal.id}
+              onClick={() => startLearning(modal.id)}
+              className="group p-10 bg-slate-800/40 border-2 border-slate-700 hover:border-indigo-400 rounded-[2.5rem] cursor-pointer transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:shadow-indigo-900/30 backdrop-blur-sm"
             >
-              The Wisdom Test
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {ALL_MODALS.map(modal => (
-          <div 
-            key={modal.id}
-            onClick={() => startLearning(modal.id)}
-            className="group p-10 bg-slate-800/40 border-2 border-slate-700 hover:border-indigo-400 rounded-[2.5rem] cursor-pointer transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:shadow-indigo-900/30 backdrop-blur-sm"
-          >
-            <div className="flex justify-between items-start mb-6">
-              <div className="p-3 rounded-2xl bg-slate-700/50 text-indigo-300">
-                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={modal.icon || "M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.754 18 18.168 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"} />
-                 </svg>
+              <div className="flex justify-between items-start mb-6">
+                <div className="p-3 rounded-2xl bg-slate-700/50 text-indigo-300">
+                   <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={modal.icon || "M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.754 18 18.168 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"} />
+                   </svg>
+                </div>
+                {state.completedModals.includes(modal.id) && (
+                  <span className="bg-emerald-500/20 text-emerald-400 px-4 py-1.5 rounded-full text-xs font-black border border-emerald-500/30 uppercase tracking-widest">Wise</span>
+                )}
               </div>
-              {state.completedModals.includes(modal.id) && (
-                <span className="bg-emerald-500/20 text-emerald-400 px-4 py-1.5 rounded-full text-xs font-black border border-emerald-500/30 uppercase tracking-widest">Wise</span>
-              )}
+              <h3 className="text-4xl font-bold text-indigo-200 serif mb-2">{modal.name}</h3>
+              <p className="text-slate-300 text-lg line-clamp-2 leading-snug font-medium mb-8">{modal.quickDefinition}</p>
+              <div className="flex items-center gap-3 text-indigo-400 font-black text-base group-hover:gap-6 transition-all uppercase tracking-wider">
+                Explore <span>→</span>
+              </div>
             </div>
-            <h3 className="text-4xl font-bold text-indigo-200 serif mb-2">{modal.name}</h3>
-            <p className="text-slate-300 text-lg line-clamp-2 leading-snug font-medium mb-8">{modal.quickDefinition}</p>
-            <div className="flex items-center gap-3 text-indigo-400 font-black text-base group-hover:gap-6 transition-all uppercase tracking-wider">
-              Explore <span>→</span>
+          ))}
+        </section>
+
+        <div className="p-12 bg-slate-900/60 rounded-[4rem] border-2 border-indigo-500/10 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+          <div className="text-center mb-16 space-y-4">
+            <h2 className="text-6xl font-black text-indigo-100 serif tracking-tight">The Modal Matrix</h2>
+            <p className="text-xl text-slate-400 italic serif max-w-2xl mx-auto">
+              "Modals are not just words; they are the colors of your intent. Choose your category and see which owls belong to it." — Dr. Ought
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {categories.map((cat, idx) => (
+              <div key={idx} className={`p-8 rounded-[2.5rem] border-2 transition-all ${cat.color} flex flex-col h-full`}>
+                <h3 className="text-2xl font-black serif mb-2 uppercase tracking-tight">{cat.title}</h3>
+                <p className="text-slate-400 text-sm mb-8 leading-relaxed font-medium">{cat.description}</p>
+                <div className="flex flex-wrap gap-3 mt-auto">
+                  {cat.modals.map(mId => {
+                    const modal = ALL_MODALS.find(m => m.id === mId);
+                    return (
+                      <button
+                        key={mId}
+                        onClick={() => startLearning(mId)}
+                        className="px-4 py-2 bg-slate-900/60 hover:bg-slate-900 border border-current rounded-xl text-xs font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95"
+                      >
+                        {modal?.name || mId.replace(/-/g, ' ')}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="mt-16 text-center border-t border-slate-800 pt-12">
+            <div className="inline-flex items-center gap-4 bg-indigo-500/10 px-8 py-4 rounded-full border border-indigo-500/20">
+              <span className="text-indigo-300 font-black uppercase tracking-widest text-xs">Total Modal Wisdom</span>
+              <span className="text-2xl font-black text-white">{ALL_MODALS.length} Modules</span>
             </div>
           </div>
-        ))}
-      </section>
-
-      <div className="p-12 bg-indigo-950/30 rounded-[3rem] border-2 border-indigo-500/20 text-center backdrop-blur-md">
-        <h2 className="text-4xl font-bold text-indigo-100 mb-8 serif">The Grammar Map</h2>
-        <div className="flex flex-wrap justify-center gap-6">
-          <div className="bg-slate-800/80 px-6 py-3 rounded-2xl text-sm font-bold text-indigo-300 border border-slate-700 shadow-lg">Ability: CAN, COULD</div>
-          <div className="bg-slate-800/80 px-6 py-3 rounded-2xl text-sm font-bold text-indigo-300 border border-slate-700 shadow-lg">Duty: MUST, OUGHT TO, SHOULD</div>
-          <div className="bg-slate-800/80 px-6 py-3 rounded-2xl text-sm font-bold text-indigo-300 border border-slate-700 shadow-lg">Chance: MAY, MIGHT</div>
-          <div className="bg-slate-800/80 px-6 py-3 rounded-2xl text-sm font-bold text-indigo-300 border border-slate-700 shadow-lg">Intent: WILL, WOULD, SHALL</div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderLearn = () => {
     if (!selectedModal) return null;
